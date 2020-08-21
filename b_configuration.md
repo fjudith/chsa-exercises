@@ -217,3 +217,19 @@ sawtooth-rest-api --connect tcp://validator:8800 --bind eth0:8008
 
 </p>
 </details>
+
+## Configure layer 3 network ports/firewall
+
+Configure `host5` services to listen on the `eth0` network interface, using following modified port configuration.
+
+Service | TCP Port
+------- | --------
+component | `55001`
+network   | `55002`
+consensus | `55003`
+rest-api  | `55004`
+
+```bash
+sawtooth-validator --bind "component:tcp://eth0:55001" --bind "network:tcp://eth0:55002" --bind "consensus:tcp://eth0:55003" --endpoint "tcp://host1:55001"
+settings-tp 
+```
