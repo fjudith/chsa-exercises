@@ -4,13 +4,16 @@ sawtooth.hyperledger.org > Docs > Release 1.0.5  > System Administator's Guide >
 
 sawtooth.hyperledger.org > FAQ > Validator > [What TCP ports does Sawtooth use?](https://sawtooth.hyperledger.org/faq/validator/#what-tcp-ports-does-sawtooth-use)
 
+sawtooth.hyperledger.org > Docs > Release 1.0.5 > System Administrator's Guide > 
+
+
 ## Configure validator peering and network
 
-Configure 3 validator hosts (i.e. `host1`, `host2` and `host3`).
+Configure three validator hosts (i.e. `host1`, `host2` and `host3`).
 Each host have two network interfaces:
 
-* `eth0`: for network and component
-* `eth1`: for consensus
+* `eth0` (192.168.1.1-3): for network and component
+* `eth1` (192.168.2.1-3): for consensus
 
 Dynamic peering must be used and Parallel processing enabled.
 
@@ -123,3 +126,94 @@ sawtooth-validator \
 
 ## Configure consensus
 
+Configure three Devmode consensus engines attached to validators 1,2 and 3.
+
+<details><summary>show</summary>
+<p>
+
+```bash
+sawset proposal create --key $HOME/.sawtooth/keys/my_key.priv \
+-o config-consensus.batch \
+sawtooth.consensus.algorithm.name=PoET \
+sawtooth.consensus.algorithm.version=0.1 \
+sawtooth.poet.report_public_key_pem="$(cat /etc/sawtooth/simulator_rk_pub.pem)" \
+sawtooth.poet.valid_enclave_measurements=$(poet enclave measurement) \
+sawtooth.poet.valid_enclave_basenames=$(poet enclave basename)
+
+poet registration create --key /etc/sawtooth/keys/validator.priv -o poet.batch
+
+sawset proposal create --key $HOME/.sawtooth/keys/my_key.priv \
+-o poet-settings.batch \
+sawtooth.poet.target_wait_time=5 \
+sawtooth.poet.initial_wait_time=25 \
+sawtooth.publisher.max_batches_per_block=100
+```
+
+
+
+</p>
+</details>
+
+## Configure logging
+
+Configure log rotation with 10 backup logs and a maximum size of 10 MB.
+
+### Log configuration reference
+
+```toml
+[formatters.simple]
+format = "[%(asctime)s.%(msecs)30d [%(threadName)s] %(module)s %(levelname)s] %(message)s"
+datefmt = "%H:%M:%S"
+
+[handlers.interconnect]
+level = "DEBUG"
+formatter = "simple"
+class = "logging.handlers.RotatingFileHander"
+filename = "interconnect.log"
+
+[loggers."sawtooth_validator.networking.interconnect"]
+level = "DEBUG"
+propagate = true
+handlers = ["interconnect"]
+```
+
+<details><summary>show</summary>
+<p>
+
+```bash
+cat << EOF > /etc/sawtooth/log_config.toml
+[formatters.simple]
+format = "[%(asctime)s.%(msecs)30d [%(threadName)s] %(module)s %(levelname)s] %(message)s"
+datefmt = "%H:%M:%S"
+
+[handlers.interconnect]
+level = "DEBUG"
+formatter = "simple"
+class = "logging.handlers.RotatingFileHander"
+filename = "interconnect.log"
+maxBytes = 10000000
+backupCount = 10
+
+[loggers."sawtooth_validator.networking.interconnect"]
+level = "DEBUG"
+propagate = true
+handlers = ["interconnect"]
+```
+
+</p>
+</details>
+
+## Configure REST API
+
+Configure REST API in order to connect to the validator running on host1.
+the service must me accessible externally.
+
+<details><summary>show</summary>
+<p>
+
+```bash
+sawtooth-rest-api --connect tcp://validator:8800 --bind eth0:8008
+```
+
+</p>
+</details>
