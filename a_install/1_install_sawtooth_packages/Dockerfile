@@ -1,6 +1,10 @@
 FROM docker.io/amd64/ubuntu:16.04
 
-ENV container=docker LANG=C.UTF-8
+ENV container=docker LANG=C.UTF-8 \
+    USER="sysops" \
+    USERID="1001" \
+    GROUP="sysops" \
+    GROUPID="1001"
 
 # Enable all repositories
 RUN sed -i 's/# deb/deb/g' /etc/apt/sources.list
@@ -34,15 +38,15 @@ RUN systemctl set-default multi-user.target && \
     systemctl mask dev-hugepages.mount sys-fs-fuse-connections.mount
 
 # Create custom user
-RUN groupadd --gid 1001 sysops && \
-    useradd --uid 1001 --gid sysops --shell /bin/bash --create-home sysops && \
-    echo "sysops ALL=(ALL:ALL) NOPASSWD:ALL" | tee -a /etc/sudoers.d/sysops
-
-# Activate custom user
-USER sysops
+RUN groupadd --gid ${GROUPID} ${GROUP} && \
+    useradd --uid ${USERID} --gid ${GROUPID} --shell /bin/bash --create-home ${USER} && \
+    echo "sysops ALL=(ALL:ALL) NOPASSWD:ALL" | tee -a /etc/sudoers.d/${USER}
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run", "/run/lock"]
 
 STOPSIGNAL SIGRTMIN+3
+
+# Activate custom user
+USER ${USER}
 
 CMD ["/sbin/init", "--log-target=journal"]

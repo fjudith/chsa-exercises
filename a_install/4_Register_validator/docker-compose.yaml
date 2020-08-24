@@ -2,6 +2,7 @@ version: "2.1"
 
 services:
   chsa-a4-00:
+    privileged: true
     build: 
       context: ./
       args:
@@ -9,7 +10,7 @@ services:
     image: chsa-exercises/ubuntu:16.04-a400
     container_name: chsa-a4-00
     hostname: chsa-a4-00
-    ports:
+    expose:
       - 8800
       - 4004
       - 8000
@@ -25,6 +26,7 @@ services:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 
   chsa-a4-01:
+    privileged: true
     build: 
       context: ./
       args:
@@ -32,7 +34,7 @@ services:
     image: chsa-exercises/ubuntu:16.04-a401
     container_name: chsa-a4-01
     hostname: chsa-a4-01
-    ports:
+    expose:
       - 8800
       - 4004
       - 8000
@@ -48,6 +50,7 @@ services:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 
   chsa-a4-02:
+    privileged: true
     build: 
       context: ./
       args:
@@ -55,7 +58,7 @@ services:
     image: chsa-exercises/ubuntu:16.04-a402
     container_name: chsa-a4-02
     hostname: chsa-a4-02
-    ports:
+    expose:
       - 8800
       - 4004
       - 8000

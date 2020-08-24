@@ -46,7 +46,11 @@ RUN groupadd --gid ${GROUPID} ${GROUP} && \
 RUN sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8AA7AF1F1091A5FD && \
     sudo add-apt-repository 'deb http://repo.sawtooth.me/ubuntu/1.0/stable xenial universe' && \
     sudo apt-get update -y && \
-    sudo apt-get install -y sawtooth && \
+    sudo apt-get install -y \
+    sawtooth  \
+    nano \
+    emacs \
+    vim && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

@@ -14,5 +14,6 @@ sudo sawadm genesis config-genesis.batch
 
 sudo systemctl enable sawtooth-validator
 sudo systemctl enable sawtooth-rest-api
+sudo systemctl enable sawtooth-settings-tp
 
 exec "$@"
