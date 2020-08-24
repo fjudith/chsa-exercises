@@ -1,0 +1,73 @@
+version: "2.1"
+
+services:
+  services:
+  chsa-a4-00:
+    build: 
+      context: ./
+    image: chsa-exercises/ubuntu:16.04-a4
+    container_name: chsa-a4-00
+    hostname: chsa-a4-00
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
+  chsa-a4-01:
+    build: 
+      context: ./
+    image: chsa-exercises/ubuntu:16.04-a4
+    container_name: chsa-a4-01
+    hostname: chsa-a4-01
+    entrypoint:
+      - "bash"
+      - "-c"
+      - "
+        sudo sawadm keygen && \
+        cd /home/sysops/ && \
+        mkdir -p .sawtooth/keys && \
+        sudo sawtooth keygen --key-dir /home/sysops/.sawtooth/keys sysops && \
+        sudo sawset genesis --key /home/sysops/.sawtooth/keys/sysops.priv && \
+        sudo sawadm genesis /home/sysops/config-genesis.batch && \
+        sudo systemctl start sawtooth validator
+        "
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
+  chsa-a4-02:
+    build: 
+      context: ./
+    image: chsa-exercises/ubuntu:16.04-a4
+    container_name: chsa-a4-02
+    hostname: chsa-a4-02
+    entrypoint:
+      - "bash"
+      - "-c"
+      - "
+        sudo sawadm keygen && \
+        sudo systemctl start sawtooth validator
+        "
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro

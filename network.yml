@@ -1,0 +1,269 @@
+# Copyright 2018 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------------------
+
+version: "2.1"
+
+services:
+
+  validatorA:
+    image: hyperledger/sawtooth-validator:1.1
+    container_name: validatorA
+    expose:
+      - 8000
+      - 7070
+      - 8800
+    command: bash -c "sleep 10000"
+    environment:
+      PYTHONPATH: "/project/sawtooth-core/consensus/poet/common:\
+        /project/sawtooth-core/consensus/poet/simulator:\
+        /project/sawtooth-core/consensus/poet/core"
+    stop_signal: SIGKILL
+    volumes:
+      - ./configtx/validatorA:/etc/sawtooth/keys
+      - ./configtx/settings:/etc/sawtooth/settings
+
+  validatorB:
+    image: hyperledger/sawtooth-validator:1.1
+    container_name: validatorB
+    expose:
+      - 8000
+      - 7070
+      - 8080
+    command: bash -c "sawtooth-validator -vv --bind network:tcp://eth0:8080 --bind component:tcp://eth0:8000 --bind consensus:tcp://eth0:7070 --peering dynamic --endpoint tcp://validatorB:8080 --seeds tcp://validatorA:8800 --scheduler serial --network-auth trust"
+    environment:
+      PYTHONPATH: "/project/sawtooth-core/consensus/poet/common:\
+        /project/sawtooth-core/consensus/poet/simulator:\
+        /project/sawtooth-core/consensus/poet/core"
+    stop_signal: SIGKILL
+    volumes:
+      - ./configtx/validatorB:/etc/sawtooth/keys
+      - ./configtx/settings:/etc/sawtooth/settings
+
+  validatorC:
+    image: hyperledger/sawtooth-validator:1.1
+    container_name: validatorC
+    expose:
+      - 8000
+      - 7070
+      - 8080
+    command: bash -c "sawtooth-validator -vv --bind network:tcp://eth0:8080 --bind component:tcp://eth0:8000 --bind consensus:tcp://eth0:7070 --peering dynamic --endpoint tcp://validatorC:8080 --seeds tcp://validatorA:8800 --scheduler serial --network-auth trust"
+    environment:
+      PYTHONPATH: "/project/sawtooth-core/consensus/poet/common:\
+        /project/sawtooth-core/consensus/poet/simulator:\
+        /project/sawtooth-core/consensus/poet/core"
+    stop_signal: SIGKILL
+    volumes:
+      - ./configtx/validatorC:/etc/sawtooth/keys
+      - ./configtx/settings:/etc/sawtooth/settings
+
+  validatorD:
+    image: hyperledger/sawtooth-validator:1.1
+    container_name: validatorD
+    expose:
+      - 8000
+      - 7070
+      - 8080
+    command: bash -c "sawtooth-validator -vv --bind network:tcp://eth0:8080 --bind component:tcp://eth0:8000 --bind consensus:tcp://eth0:7070 --peering dynamic --endpoint tcp://validatorD:8080 --seeds tcp://validatorA:8800  --scheduler serial --network-auth trust"
+    environment:
+      PYTHONPATH: "/project/sawtooth-core/consensus/poet/common:\
+        /project/sawtooth-core/consensus/poet/simulator:\
+        /project/sawtooth-core/consensus/poet/core"
+    stop_signal: SIGKILL
+    volumes:
+      - ./configtx/validatorD:/etc/sawtooth/keys
+      - ./configtx/settings:/etc/sawtooth/settings
+
+# REST API'S 
+
+  rest-apiA:
+    image: hyperledger/sawtooth-rest-api:1.1
+    container_name: rest-apiA
+    command: bash -c "sawtooth-rest-api -vv --connect tcp://validatorA:8000 --bind rest-apiA:8008"
+    expose:
+      - 8008
+    stop_signal: SIGKILL
+
+  rest-apiB:
+    image: hyperledger/sawtooth-rest-api:1.1
+    container_name: rest-apiB
+    expose:
+      - 8008
+    command: bash -c "sawtooth-rest-api --connect tcp://validatorB:8000 --bind rest-apiB:8008"
+    stop_signal: SIGKILL
+
+  rest-apiC:
+    image: hyperledger/sawtooth-rest-api:1.1
+    container_name: rest-apiC
+    command: bash -c "sawtooth-rest-api --connect tcp://validatorC:8000 --bind rest-apiC:8008"
+    expose:
+      - 8008
+    stop_signal: SIGKILL
+
+  rest-apiD:
+    image: hyperledger/sawtooth-rest-api:1.1
+    container_name: rest-apiD
+    command: bash -c "sawtooth-rest-api --connect tcp://validatorD:8000 --bind rest-apiD:8008"
+    expose:
+      - 8008
+    stop_signal: SIGKILL
+
+# SETTINGS TRANSACTION PROCESSORS
+
+  settingsA:
+    image: hyperledger/sawtooth-settings-tp:1.1
+    container_name: settingsA
+    command: bash -c "sleep 100000"
+#settings-tp -vv -C tcp://validatorA:8000
+    expose:
+      - 8000
+
+  settingsB:
+    image: hyperledger/sawtooth-settings-tp:1.1
+    container_name: settingsB
+    command: settings-tp -vv -C tcp://validatorB:8000
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+  settingsC:
+    image: hyperledger/sawtooth-settings-tp:1.1
+    container_name: settingsC
+    command: bash -c "settings-tp -C tcp://validatorC:8000"
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+  settingsD:
+    image: hyperledger/sawtooth-settings-tp:1.1
+    container_name: settingsD
+    command: bash -c "settings-tp -C tcp://validatorD:8000"
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+# INTKEY TRANSACTION PROCESSORS
+
+  intkeyA:
+    image: hyperledger/sawtooth-intkey-tp-python:1.1
+    container_name: intkeyA
+    command: intkey-tp-python -C tcp://validatorA:8000
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+  intkeyB:
+    image: hyperledger/sawtooth-intkey-tp-python:1.1
+    container_name: intkeyB
+    command: intkey-tp-python -C tcp://validatorB:8000
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+  intkeyC:
+    image: hyperledger/sawtooth-intkey-tp-python:1.1
+    container_name: intkeyC
+    command: intkey-tp-python -C tcp://validatorC:8000
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+  intkeyD:
+    image: hyperledger/sawtooth-intkey-tp-python:1.1
+    container_name: intkeyD
+    command: intkey-tp-python -C tcp://validatorD:8000
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+# POET CONSENSUS ENGINES
+
+  engineA:
+    image: hyperledger/sawtooth-poet-engine:1.1
+    container_name: engineA
+    command: bash -c "sleep 10000"
+    volumes:
+      - ./configtx/validatorA:/etc/sawtooth/keys
+      - ./configtx/settings:/etc/sawtooth/settings
+  engineB:
+    image: hyperledger/sawtooth-poet-engine:1.1
+    container_name: engineB
+    command: bash -c "poet-engine -C tcp://validatorB:7070 --component tcp://validatorB:8000"
+    volumes:
+      - ./configtx/validatorB:/etc/sawtooth/keys
+      - ./configtx/settings:/etc/sawtooth/settings
+
+  engineC:
+    image: hyperledger/sawtooth-poet-engine:1.1
+    container_name: engineC
+    command: bash -c "poet-engine -C tcp://validatorC:7070 --component tcp://validatorC:8000"
+    volumes:
+      - ./configtx/validatorC:/etc/sawtooth/keys
+      - ./configtx/settings:/etc/sawtooth/settings
+
+  engineD:
+    image: hyperledger/sawtooth-poet-engine:1.1
+    container_name: engineD
+    command: bash -c "poet-engine -C tcp://validatorD:7070 --component tcp://validatorD:8000"
+    volumes:
+      - ./configtx/validatorD:/etc/sawtooth/keys
+      - ./configtx/settings:/etc/sawtooth/settings
+
+# POET REGISTRY TRANSACTION PROCESSORS
+
+  registryA:
+    image: hyperledger/sawtooth-poet-validator-registry-tp:1.1
+    container_name: registryA
+    command: poet-validator-registry-tp -C tcp://validatorA:8000
+    environment:
+      PYTHONPATH: /project/sawtooth-core/consensus/poet/common
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+  registryB:
+    image: hyperledger/sawtooth-poet-validator-registry-tp:1.1
+    container_name: registryB
+    command: poet-validator-registry-tp -C tcp://validatorB:8000
+    environment:
+      PYTHONPATH: /project/sawtooth-core/consensus/poet/common
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+  registryC:
+    image: hyperledger/sawtooth-poet-validator-registry-tp:1.1
+    container_name: registryC
+    command: poet-validator-registry-tp -C tcp://validatorC:8000
+    environment:
+      PYTHONPATH: /project/sawtooth-core/consensus/poet/common
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+  registryD:
+    image: hyperledger/sawtooth-poet-validator-registry-tp:1.1
+    container_name: registryD
+    command: poet-validator-registry-tp -C tcp://validatorD:8000
+    environment:
+      PYTHONPATH: /project/sawtooth-core/consensus/poet/common
+    expose:
+      - 8000
+    stop_signal: SIGKILL
+
+# NETWORK CLI  
+  cli:
+    image: hyperledger/sawtooth-all:1.1
+    container_name: cli
+    entrypoint: bash -c "sawtooth keygen student && sleep 10000"
