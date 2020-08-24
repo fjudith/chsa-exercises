@@ -1,6 +1,10 @@
 FROM docker.io/amd64/ubuntu:16.04
 
-ENV container=docker LANG=C.UTF-8
+ENV container=docker LANG=C.UTF-8 \
+    USER="sysops" \
+    USERID="1001" \
+    GROUP="sysops" \
+    GROUPID="1001"
 
 # Enable all repositories
 RUN sed -i 's/# deb/deb/g' /etc/apt/sources.list
@@ -34,9 +38,9 @@ RUN systemctl set-default multi-user.target && \
     systemctl mask dev-hugepages.mount sys-fs-fuse-connections.mount
 
 # Create custom user
-RUN groupadd --gid 1001 sysops && \
-    useradd --uid 1001 --gid sysops --shell /bin/bash --create-home sysops && \
-    echo "sysops ALL=(ALL:ALL) NOPASSWD:ALL" | tee -a /etc/sudoers.d/sysops
+RUN groupadd --gid ${GROUPID} ${GROUP} && \
+    useradd --uid ${USERID} --gid ${GROUPID} --shell /bin/bash --create-home ${USER} && \
+    echo "sysops ALL=(ALL:ALL) NOPASSWD:ALL" | tee -a /etc/sudoers.d/${USER}
 
 # Install Sawtooth
 RUN sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8AA7AF1F1091A5FD && \
@@ -46,16 +50,23 @@ RUN sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8AA7A
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ARG ASSET_PATH
+
 # Add configuration file
-ARG VALIDATOR_CONFIG
+COPY ${ASSET_PATH}/validator.toml /etc/sawtooth/validator.toml
 
-COPY $VALIDATOR_CONFIG /etc/sawtooth/validator.toml
-
-# Activate custom user
-USER sysops
+# Add Entrypoint
+COPY ${ASSET_PATH}/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh && \
+    chown ${USERID}:${GROUPID} /docker-entrypoint.sh  
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run", "/run/lock"]
 
 STOPSIGNAL SIGRTMIN+3
+
+# Activate custom user
+USER ${USER}
+
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
 CMD ["/sbin/init", "--log-target=journal"]

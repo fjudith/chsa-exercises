@@ -31,5 +31,5 @@ sudo apt-get install -y sawtooth
 Once finished, run the following command to stop and cleanup the docker lab environment.
 
 ```bash
-docker-compose rm --force --stop -v
+docker-compose down --remove-orphans -v
 ```

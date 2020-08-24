@@ -6,7 +6,10 @@ services:
     image: chsa-exercises/ubuntu:16.04-a1
     container_name: chsa-a1-00
     hostname: chsa-a1-00
-    command: ["bash", "-c", "tail -s 1 -f /dev/null"]
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
     tmpfs:
       - /run
       - /tmp

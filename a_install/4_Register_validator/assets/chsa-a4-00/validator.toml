@@ -1,0 +1,2 @@
+# sudo cp /etc/sawtooth/validator.toml.example /etc/sawtooth/validator.toml
+
