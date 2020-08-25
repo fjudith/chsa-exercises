@@ -28,7 +28,7 @@
 # network and component.
 bind = [
   "network:tcp://127.0.0.1:8800",
-  "component:tcp://127.0.0.1:4004"
+  "component:tcp://eth0:4004"
 ]
 
 # The type of peering approach the validator should take. Choices are 'static'

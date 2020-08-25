@@ -1,15 +1,15 @@
 version: "2.1"
 
 services:
-  chsa-a7-00:
+  chsa-b1-00:
     privileged: true
     build: 
       context: ./
       args:
-        ASSET_PATH: assets/chsa-a7-00
-    image: chsa-exercises/ubuntu:16.04-a700
-    container_name: chsa-a7-00
-    hostname: chsa-a7-00
+        ASSET_PATH: assets/chsa-b1-00
+    image: chsa-exercises/ubuntu:16.04-b100
+    container_name: chsa-b1-00
+    hostname: chsa-b1-00
     expose:
       - 8800
       - 4004
@@ -25,15 +25,15 @@ services:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 
-  chsa-a7-01:
+  chsa-b1-01:
     privileged: true
     build: 
       context: ./
       args:
-        ASSET_PATH: assets/chsa-a7-01
-    image: chsa-exercises/ubuntu:16.04-a701
-    container_name: chsa-a7-01
-    hostname: chsa-a7-01
+        ASSET_PATH: assets/chsa-b1-01
+    image: chsa-exercises/ubuntu:16.04-b101
+    container_name: chsa-b1-01
+    hostname: chsa-b1-01
     expose:
       - 8800
       - 4004
@@ -49,15 +49,15 @@ services:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 
-  chsa-a7-02:
+  chsa-b1-02:
     privileged: true
     build: 
       context: ./
       args:
-        ASSET_PATH: assets/chsa-a7-02
-    image: chsa-exercises/ubuntu:16.04-a702
-    container_name: chsa-a7-02
-    hostname: chsa-a7-02
+        ASSET_PATH: assets/chsa-b1-02
+    image: chsa-exercises/ubuntu:16.04-b102
+    container_name: chsa-b1-02
+    hostname: chsa-b1-02
     expose:
       - 8800
       - 4004

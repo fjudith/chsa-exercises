@@ -2,45 +2,21 @@
 
 This repository contains a set of exercises to prepare for the [Certified Hyperledger Sawtooth](https://training.linuxfoundation.org/certification/certified-hyperledger-sawtooth-administrator-chsa/) exam.
 
-1. [Install](./a_install) 10%
-2. [Configuration](./b_configuration) 25%
-3. [Permissioning, Identity Managmeent, and Security](./c_security) 20%
-4. [Lifecycle](./d_lifecycle) 25%
-5. [Troubleshooting](./e_troubleshooting) 20%
+Labs are designed to practice different topology and configuration by leveraging only `systemd` and a `non-root` user to execute tasks.
+
+# Roadmap
+
+* [x] [Install](./a_install) 10%
+* [ ] [Configuration](./b_configuration) 25%
+* [ ] [Permissioning, Identity Managmeent, and Security](./c_security) 20%
+* [ ] [Lifecycle](./d_lifecycle) 25%
+* [ ] [Troubleshooting](./e_troubleshooting) 20%
 
 ![Sawtooth Architecture](https://sawtooth.hyperledger.org/docs/core/nightly/master/_images/appdev-environment-multi-node.svg)
 
 ## Known issues
 
-* Works on Windows Subsystem for Linux (WSL) 2, only if using Ubuntu 20.04 (Focal) and [Genie](https://github.com/arkane-systems/genie) is installed.
-
-```bash
-sudo apt install daemonize dbus policykit-1 systemd
-
-# add Microsoft repo with .Net 3.1 runtime
-wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-
-curl -s https://packagecloud.io/install/repositories/arkane-systems/wsl-translinux/script.deb.sh | sudo bash
-sudo apt install -y systemd-genie
-```
-
-Add configuration `/usr/lib/genie/deviated-preverts.conf`:
-
-```json
-{
-  "daemonize": "/usr/bin/daemonize",
-  "mount": "/bin/mount",
-  "runuser": "/sbin/runuser",
-  "systemd": "/bin/systemd"
-}
-```
-
-Restart WSL with Genie
-
-```shell
-wsl.exe genie -i
-```
+* Works on Windows Subsystem for Linux (WSL) 2 [(See doc)](./docs/wsl_genie.md).
 
 Shield: [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 

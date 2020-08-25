@@ -1,11 +1,11 @@
 # Install (10%)
 
 1. [Install Sawtooth packages](./1_install_sawtooth_packages/README.md)
-2. Start component services
-3. Generate keys
-4. Register validator
-5. Configure peering
-6. Verify install and fix if necessary
-7. Connect transaction processor to validator
-8. Create genesis block
-9. Verify system meets hardware requirements
+2. [Start component services](./2_start_component_services/README.md)
+3. [Generate keys](./3_generate_keys/README.md)
+4. [Register validator](./4_register_validator/README.md)
+5. [Configure peering](./5_configure_peering/docker-compose.yaml)
+6. [Verify install and fix if necessary](./6_verify_install_and_fix_if_necessary/README.md)
+7. [Connect transaction processor to validator](./7_connect_transaction_processor_to_validator/README.md)
+8. [Create genesis block](./8_create_genesis_block/README.md)
+9. [Verify system meets hardware requirements](./9_verify_system_meets_harware_requirements/README.md)
