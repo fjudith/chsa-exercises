@@ -1,0 +1,18 @@
+version: "2.1"
+
+services:
+  chsa-a9-00:
+    build: ./
+    image: chsa-exercises/ubuntu:16.04-a9
+    container_name: chsa-a9-00
+    hostname: chsa-a9-00
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro

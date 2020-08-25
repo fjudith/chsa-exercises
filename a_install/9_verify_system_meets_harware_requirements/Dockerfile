@@ -42,35 +42,11 @@ RUN groupadd --gid ${GROUPID} ${GROUP} && \
     useradd --uid ${USERID} --gid ${GROUPID} --shell /bin/bash --create-home ${USER} && \
     echo "sysops ALL=(ALL:ALL) NOPASSWD:ALL" | tee -a /etc/sudoers.d/${USER}
 
-# Install Sawtooth
-RUN sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8AA7AF1F1091A5FD && \
-    sudo add-apt-repository 'deb http://repo.sawtooth.me/ubuntu/1.0/stable xenial universe' && \
-    sudo apt-get update -y && \
-    sudo apt-get install -y \
-    sawtooth  \
-    nano \
-    emacs \
-    vim && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-ARG ASSET_PATH
-
-# Add configuration file
-COPY ${ASSET_PATH}/*.toml /etc/sawtooth/
-
-# Add Entrypoint
-COPY ${ASSET_PATH}/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh && \
-    chown ${USERID}:${GROUPID} /docker-entrypoint.sh  
-
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run", "/run/lock"]
 
 STOPSIGNAL SIGRTMIN+3
 
 # Activate custom user
 USER ${USER}
-
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
 CMD ["/sbin/init", "--log-target=journal"]

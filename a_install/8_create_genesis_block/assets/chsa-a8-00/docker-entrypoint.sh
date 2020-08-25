@@ -9,10 +9,10 @@ fi
 mkdir -p /home/${USER}/.sawtooth/keys
 
 sudo sawtooth keygen --key-dir /home/${USER}/.sawtooth/keys ${USER}
-sudo sawset genesis --key /home/${USER}/.sawtooth/keys/${USER}.priv
-sudo sawadm genesis config-genesis.batch
+sudo chown ${USER}:${USER} /home/${USER}/.sawtooth/keys/${USER}.p*
 
 sudo systemctl enable sawtooth-validator
 sudo systemctl enable sawtooth-settings-tp
+sudo systemctl enable sawtooth-rest-api
 
 exec "$@"
