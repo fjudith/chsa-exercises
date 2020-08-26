@@ -26,18 +26,18 @@ services:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   
   chsa-b6-01:
-    privileged: true
-    image: amd64/influxdb:alpine
+    image: amd64/influxdb
     container_name: chsa-b6-01
     hostname: chsa-b6-01
     expose:
       - 8086
     environment:
-      INFLUXDB_ADMIN_USER: influxdb
-      INFLUXDB_ADMIN_PASSWORD: V3ry1nS3cur3P4ssw0rd
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: supersecretpassword
+      INFLUXDB_USER: influxdb
+      INFLUXDB_USER_PASSWORD: V3ry1ns3cur3P4ssw0rd
       INFLUXDB_DB: sawtooth
     command:
-      - "influxdb"
       - "-config"
       - "/etc/influxdb/influxdb.conf"
     volumes:
