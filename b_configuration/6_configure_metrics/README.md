@@ -1,4 +1,4 @@
-# Connect transaction processor to validator
+# Configure metrics
 
 Build and run the `Ubuntu 16.04 (Xenial)` containers.
 
@@ -6,32 +6,38 @@ Build and run the `Ubuntu 16.04 (Xenial)` containers.
 docker-compose up --build -d
 ```
 
-The stack includes 3 containers `chsa-a7-00`, `chsa-a7-01` and `chsa-a7-02`.
-The `validator`, `settings-tp` and `rest-api` services are installed and running locally only on `chsa-a7-00`.
+The stack includes 2 containers `chsa-b6-00` et `chsa-b6-01`.
+The `validator`, `settings-tp` and `rest-api` services are installed and running locally only on `chsa-b6-00`.
 
-1. Expose the validator.
-1. Connect the IntKey transaction processor from `chsa-a7-01`.
-2. Connect the XO transaction processor from `chsa-a7-01`.
+`chsa-b6-01` runs an InfluxDB time series database listening on port `8086` with the following credentials:
+
+* **Username**: `influxdb`
+* **Password**: `V3ry1ns3cur3P4ssw0rd`
 
 <details><summary>show</summary>
 <p>
 
 ## Expose the validator
 
-1. Open a terminal session.
+1. Open a terminal session on the Validator host.
 
 ```bash
-docker exec -it chsa-a7-00 bash
+docker exec -it chsa-b6-00 bash
 ```
 
-2. Edit the Validator in order to expose the component service `/etc/sawtooth/validator.toml`.
+2. Edit the Validator configuration file service `/etc/sawtooth/validator.toml`.
 
 ```toml
 ...
-bind = [
-    "network://tcp://127.0.0.1:8800",
-    "component://tcp://eth0:4004"
-]
+# The host and port for Open TSDB database used for metrics
+opentsdb_url = "http://chsa-b4-01:8086"
+
+# The name of the database used for storing metrics
+opentsdb_db = "sawtooth"
+
+opentsdb_username = "influxdb"
+
+opentsdb_password = "V3ry1ns3cur3P4ssw0rd"
 ...
 ```
 
@@ -46,13 +52,13 @@ sudo systemctl restart sawtooth-validator
 1. Open a terminal session.
 
 ```bash
-docker exec -it chsa-a7-01 bash
+docker exec -it chsa-b6-01 bash
 ```
 
 2. Modify the target host in the Intkey transaction processor environment file.
 
 ```bash
-SAWTOOTH_INTKEY_TP_PYTHON_ARGS=-v -C tcp://chsa-a7-00:4004
+SAWTOOTH_INTKEY_TP_PYTHON_ARGS=-v -C tcp://chsa-b6-00:4004
 ```
 
 3. Enable and state the service.
@@ -70,8 +76,8 @@ journalctl -lu sawtooth-intkey-tp-python
 
 ```text
 -- Logs begin at Tue 2020-08-25 20:05:43 UTC, end at Tue 2020-08-25 20:33:14 UTC. --
-Aug 25 20:20:29 chsa-a7-01 systemd[1]: Started Sawtooth Intkey TP Python.
-Aug 25 20:20:29 chsa-a7-01 intkey-tp-python[74]: [2020-08-25 20:20:29.717 INFO     core] register attempt: OK
+Aug 25 20:20:29 chsa-b6-01 systemd[1]: Started Sawtooth Intkey TP Python.
+Aug 25 20:20:29 chsa-b6-01 intkey-tp-python[74]: [2020-08-25 20:20:29.717 INFO     core] register attempt: OK
 ```
 
 
@@ -81,13 +87,13 @@ Aug 25 20:20:29 chsa-a7-01 intkey-tp-python[74]: [2020-08-25 20:20:29.717 INFO  
 1. Open a terminal session.
 
 ```bash
-docker exec -it chsa-a7-02 bash
+docker exec -it chsa-b6-02 bash
 ```
 
 2. Modify the target host in the Intkey transaction processor environment file.
 
 ```bash
-SAWTOOTH_XO_TP_PYTHON_ARGS=-v -C tcp://chsa-a7-00:4004
+SAWTOOTH_XO_TP_PYTHON_ARGS=-v -C tcp://chsa-b6-00:4004
 ```
 
 3. Enable and state the service.
@@ -105,8 +111,8 @@ journalctl -lu sawtooth-xo-tp-python
 
 ```text
 -- Logs begin at Tue 2020-08-25 20:05:43 UTC, end at Tue 2020-08-25 20:34:15 UTC. --
-Aug 25 20:20:13 chsa-a7-02 systemd[1]: Started Sawtooth XO TP Python.
-Aug 25 20:20:13 chsa-a7-02 xo-tp-python[66]: [2020-08-25 20:20:13.809 INFO     core] register attempt: OK
+Aug 25 20:20:13 chsa-b6-02 systemd[1]: Started Sawtooth XO TP Python.
+Aug 25 20:20:13 chsa-b6-02 xo-tp-python[66]: [2020-08-25 20:20:13.809 INFO     core] register attempt: OK
 ```
 
 ### References

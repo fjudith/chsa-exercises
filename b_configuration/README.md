@@ -1,7 +1,7 @@
 1. [Configure validator peering and network](./1_configure_validator_peering_and_network/README.md)
 2. [Configure consensus](./2_configure_consensus/README.md)
-3. [Configure logging](3_configure_logging/README.md)
-4. [Configure REST API]
+3. [Configure logging](./3_configure_logging/README.md)
+4. [Configure REST API](./4_configure_rest-api/README.md)
 5. [Configure layer 3 network ports/firewall]
 6. [Configure metrics]
 7. [Configure transaction processor endpoint]

@@ -1,0 +1,44 @@
+version: "2.1"
+
+services:
+  chsa-b6-00:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-b6-00
+    image: chsa-exercises/ubuntu:16.04-b600
+    container_name: chsa-b6-00
+    hostname: chsa-b6-00
+    expose:
+      - 8800
+      - 4004
+      - 8000
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  
+  chsa-b6-01:
+    privileged: true
+    image: amd64/influxdb:alpine
+    container_name: chsa-b6-01
+    hostname: chsa-b6-01
+    expose:
+      - 8086
+    environment:
+      INFLUXDB_ADMIN_USER: influxdb
+      INFLUXDB_ADMIN_PASSWORD: V3ry1nS3cur3P4ssw0rd
+      INFLUXDB_DB: sawtooth
+    command:
+      - "influxdb"
+      - "-config"
+      - "/etc/influxdb/influxdb.conf"
+    volumes:
+      - ./assets/chsa-b6-01/influxdb.conf:/etc/influxdb/influxdb.conf:ro
