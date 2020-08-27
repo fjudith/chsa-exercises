@@ -22,7 +22,7 @@ The `validator`, `settings-tp` and `rest-api` services are installed and running
 1. Open a terminal session on the Validator host.
 
 ```bash
-docker exec -it chsa-b6-00 bash
+docker exec -u sysops -it chsa-b6-00 bash
 ```
 
 2. Edit the Validator configuration file service `/etc/sawtooth/validator.toml`.
