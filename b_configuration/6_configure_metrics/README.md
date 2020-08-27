@@ -60,7 +60,6 @@ opentsdb_url = "http://chsa-b6-01:8086"
 opentsdb_db = "metrics"
 
 opentsdb_username = "lrdata"
-
 opentsdb_password = "{lrdata-pw}"
 ...
 ```
@@ -82,6 +81,7 @@ sudo systemctl restart sawtooth-rest-api
   database = "metrics"
   username = "lrdata"
   password = "{lrdata-pw}"
+  skip_database_creation  = true
 ...
 ```
 
