@@ -48,9 +48,9 @@ services:
     image: grafana/grafana:7.1.5
     container_name: chsa-b6-02
     hostname: chsa-b6-02
-    port:
+    ports:
       - 53000:3000
     volumes:
-      - ./assets/chsa-b6-02/influxdb_datasource.conf:/etc/grafana/provisioning/datasources/influxdb_datasource.json:ro
-      # - ./assets/chsa-b6-02/sawtooth_performance.json:/etc/grafana/provisioning/dashboards/sawtooth_performance.json:ro
+      - ./assets/chsa-b6-02/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+      - ./assets/chsa-b6-02/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml:ro
       - ./assets/chsa-b6-02/sawtooth_performance.json:/grafana-dashboard-definitions/0/sawtooth/sawtooth_performance.json:ro
