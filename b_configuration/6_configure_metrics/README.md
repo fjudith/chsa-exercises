@@ -91,7 +91,19 @@ sudo systemctl restart sawtooth-rest-api
 sudo systemctl restart telegraf
 ```
 
-## Query the InfluxDB database
+## Test
+
+1. Submit some intkey transactions
+
+```bash
+intkey set test1 10 && sleep 2
+intkey set test2 20 && sleep 3
+intkey set test3 30 && sleep 1
+intkey set test4 40 && sleep 5
+intkey set test5 50 && sleep 4
+```
+
+2. Check the InfluxDB content
 
 ```bash
 # Show database
