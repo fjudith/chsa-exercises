@@ -1,0 +1,50 @@
+version: "2.1"
+
+services:
+  chsa-b7-00:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-b7-00
+    image: chsa-exercises/ubuntu:16.04-b700
+    container_name: chsa-b7-00
+    hostname: chsa-b7-00
+    expose:
+      - 8800
+      - 4004
+      - 8000
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  
+  chsa-b7-01:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-b7-01
+    image: chsa-exercises/ubuntu:16.04-b701
+    container_name: chsa-b7-01
+    hostname: chsa-b7-01
+    expose:
+      - 8800
+      - 4004
+      - 8000
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
