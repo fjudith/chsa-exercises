@@ -12,13 +12,19 @@ RUN sed -i 's/# deb/deb/g' /etc/apt/sources.list
 # Install packages
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
+    software-properties-common \
+    apt-transport-https \
+    nano \
+    emacs \
+    vim \
+    curl \
+    netcat \
     dbus \
     systemd \
     systemd-cron \
     rsyslog \
     iproute2 \
-    sudo \
-    software-properties-common && \
+    sudo && \
     apt-get clean && \
     rm -rf /usr/share/doc/* /usr/share/man/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -46,13 +52,17 @@ RUN groupadd --gid ${GROUPID} ${GROUP} && \
 RUN sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8AA7AF1F1091A5FD && \
     sudo add-apt-repository 'deb http://repo.sawtooth.me/ubuntu/1.0/stable xenial universe' && \
     sudo apt-get update -y && \
-    sudo apt-get install -y \
-    sawtooth  \
-    nano \
-    emacs \
-    vim && \
+    sudo apt-get install -y sawtooth  && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /usr/share/doc/* /usr/share/man/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install Telegraph
+RUN curl -sL https://repos.influxdata.com/influxdb.key |  sudo apt-key add - && \
+    sudo apt-add-repository "deb https://repos.influxdata.com/ubuntu xenial stable" && \
+    sudo apt-get update -y && \
+    sudo apt-get install -y telegraf && \
+    apt-get clean && \
+    rm -rf /usr/share/doc/* /usr/share/man/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG ASSET_PATH
 

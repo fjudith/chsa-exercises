@@ -30,7 +30,7 @@ docker exec -it chsa-b6-00 bash
 ```toml
 ...
 # The host and port for Open TSDB database used for metrics
-opentsdb_url = "http://chsa-b4-01:8086"
+opentsdb_url = "http://chsa-b6-01:8086"
 
 # The name of the database used for storing metrics
 opentsdb_db = "metrics"
@@ -49,12 +49,12 @@ sudo systemctl restart sawtooth-validator
 
 ## Configure REST API service
 
-1. Edit the REST API configuration file service `/etc/sawtooth/rest_api.toml`
+1. Edit the REST API configuration file service `/etc/sawtooth/rest_api.toml`.
 
 ```toml
 ...
 # The host and port for Open TSDB database used for metrics
-opentsdb_url = "http://influxdb:8086"
+opentsdb_url = "http://chsa-b6-01:8086"
 
 # The name of the database used for storing metrics
 opentsdb_db = "metrics"
@@ -65,10 +65,30 @@ opentsdb_password = "{lrdata-pw}"
 ...
 ```
 
-3. Restart the REST API service.
+2. Restart the REST API service.
 
 ```bash
 sudo systemctl restart sawtooth-rest-api
+```
+
+## Configure Telegraf (optional)
+
+1. Edit the REST API configuration file service `/etc/telegraf/telegraf.conf`.
+
+```toml
+...
+[[outputs.influxdb]]
+  urls = ["http://chsa-b6-01:8086"]
+  database = "metrics"
+  username = "lrdata"
+  password = "{lrdata-pw}"
+...
+```
+
+2. Restart the REST API service.
+
+```bash
+sudo systemctl restart telegraf
 ```
 
 ## Query the InfluxDB database
