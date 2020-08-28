@@ -1,7 +1,7 @@
 # Permissioning, Identity Management, and Security
 
 1. [Identify network ID / system / peer ID](./1_identify_network_ID_system_peer_ID/README.md)
-2. Permission a transaction processor
+2. [Permission a transaction processor](./2.permission_a_transaction_processor/README.md)
 3. Policy management
 4. Validator registration
 5. System permissions
