@@ -12,7 +12,7 @@ The `validator`, `settings-tp`, `xo-tp-python`, `intkey-tp-python` and `rest-api
 
 The Rest API has been exposed to allow third parties to connect.
 
-Configure the CLI in order to avoid passing the `--url` command line argument every time.
+Configure the CLI in order to avoid passing the `--url` argument every time to the `sawtooth` command.
 
 <details><summary>show</summary>
 <p>
@@ -44,6 +44,8 @@ sawtooth block list
 ### References
 
 * sawtooth.hyperledger.org > Docs > Release 1.0.5  > System Administator's Guide > [Configuring Sawtooth](https://sawtooth.hyperledger.org/docs/core/releases/1.0.5/sysadmin_guide/configuring_sawtooth/path_configuration_file.html)
+
+* Issue (limited scope of use) > (https://jira.hyperledger.org/browse/STL-1308)
 
 </p>
 </details>
