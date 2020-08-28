@@ -15,6 +15,12 @@ host | services
 `chsa-c1-02` | `validator`, `settings-tp`, `intkey-tp-python`, `xo-tp-python` and `rest-api`
 `chsa-c1-loadgen` | Intkey load generator
 
+Retreive the following informations
+
+* Vote permission key
+* List of batches
+* List of peers
+* List of transactions
 
 <details><summary>show</summary>
 <p>
@@ -30,10 +36,11 @@ docker exec -it chsa-c1-loadgen bash
 Using Sawtooth CLI.
 
 ```bash
-sawtooth batch list --url http://chsa-c1-00:8008
-sawtooth state list --url http://chsa-c1-01:8008
-sawtooth peer list --url http://chsa-c1-02:8008
-sawtooth transaction list --url http://chsa-c1-00:8008
+sawtooth settings list --filter sawtooth.settings.vote.authorized_key --url http://chsa-c1-00:8008
+sawtooth batch list --url http://chsa-c1-01:8008
+sawtooth state list --url http://chsa-c1-02:8008
+sawtooth peer list --url http://chsa-c1-00:8008
+sawtooth transaction list --url http://chsa-c1-01:8008
 ```
 
 ## Method 2
