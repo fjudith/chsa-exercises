@@ -6,12 +6,24 @@ Build and run the `Ubuntu 16.04 (Xenial)` containers.
 docker-compose up --build -d
 ```
 
-The stack includes 3 containers `chsa-b9-00`, `chsa-b9-01` and `chsa-b9-02`.
-The `validator`, `settings-tp` and `rest-api` services are already installed.
+The stack includes the following hosts:
 
-Only `chsa-b9-00` is currently configured and running locally.
+host | services
+---- | --------
+`chsa-b9-00` | `validator`, `settings-tp`, `intkey-tp-python`, `xo-tp-python` and `rest-api`
+`chsa-b9-01` | `validator`, `settings-tp`, `intkey-tp-python`, `xo-tp-python` and `rest-api`
+`chsa-b9-02` | `validator`, `settings-tp`, `intkey-tp-python`, `xo-tp-python` and `rest-api`
+`chsa-b9-influxdb` | InfluxDB time series database
+`chsa-b9-grafana` | Grafana monitoring visualization <http://localhost:53000>
+`chsa-b9-loadgen` | Intkey load generator
 
-Configure dynamic peering **Using TOML configuration files** and start the services in the remaining hosts.
+The load generator is randomly raising the following issue
+
+```text
+Error: Error 429: Too Many Requests
+Writing to batches.intkey...
+[01:28:05 WARNING load] (429): Too Many Requests
+```
 
 <details><summary>show</summary>
 <p>
