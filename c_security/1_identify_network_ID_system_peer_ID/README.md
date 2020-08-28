@@ -56,7 +56,7 @@ curl http://chsa-c1-00:8008/transactions
 
 ### References
 
-* sawtooth.hyperledger.org > Docs > Release 1.0.5  > System Administator's Guide > Configuring Sawtooth > [Validator Configuration File](https://sawtooth.hyperledger.org/docs/core/releases/1.0.5/sysadmin_guide/configuring_sawtooth/validator_configuration_file.html)
+* sawtooth.hyperledger.org > Docs > Release 1.0.5  > CLI Command Reference > [sawtooth](https://sawtooth.hyperledger.org/docs/core/releases/1.0.5/cli/sawtooth.html)
 
 </p>
 </details>
