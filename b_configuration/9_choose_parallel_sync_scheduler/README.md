@@ -17,7 +17,7 @@ host | services
 `chsa-b9-grafana` | Grafana monitoring visualization <http://localhost:53000>
 `chsa-b9-loadgen` | Intkey load generator
 
-The load generator is randomly raising the following issue
+The load generator is frequently raising the following issue
 
 ```text
 Error: Error 429: Too Many Requests
@@ -28,26 +28,19 @@ Writing to batches.intkey...
 <details><summary>show</summary>
 <p>
 
-## Configure peering on `chsa-b7-00`
+## Configure peering on `chsa-b9-00`
 
 1. Open a terminal session.
 
 ```bash
-docker exec -u sysops -it chsa-b7-00 bash
+docker exec -u sysops -it chsa-b9-00 bash
 ```
 
 2. Edit the Validator configuration file  `/etc/sawtooth/validator.toml`.
 
 ```toml
 ...
-bind = [
-  "network:tcp://eth0:8800",
-  "component:tcp://127.0.0.1:4004"
-]
-...
-endpoint = "tcp://chsa-b9-00:8800"
-...
-peering = "dynamic"
+scheduler = 'parallel'
 ...
 ```
 
@@ -69,25 +62,14 @@ docker exec -u sysops -it chsa-b9-01 bash
 
 ```toml
 ...
-bind = [
-  "network:tcp://eth0:8800",
-  "component:tcp://127.0.0.1:4004"
-]
-...
-endpoint = "tcp://chsa-b9-01:8800"
-...
-peering = "dynamic"
-...
-seeds = ["tcp://chsa-b9-00:8800"]
+scheduler = 'parallel'
 ...
 ```
 
 3. Enable and start services.
 
 ```bash
-sudo sawadm keygen
-sudo systemctl enable sawtooth-validator sawtooth-settings-tp sawtooth-rest-api
-sudo systemctl start sawtooth-validator sawtooth-settings-tp sawtooth-rest-api
+sudo systemctl restart sawtooth-validator
 ```
 
 ## Configure peering on `chsa-b9-02`
@@ -102,32 +84,19 @@ docker exec -u sysops -it chsa-b9-02 bash
 
 ```toml
 ...
-bind = [
-  "network:tcp://eth0:8800",
-  "component:tcp://127.0.0.1:4004"
-]
-...
-endpoint = "tcp://chsa-b9-02:8800"
-...
-peering = "dynamic"
-...
-seeds = ["tcp://chsa-b9-00:8800"]
+scheduler = 'parallel'
 ...
 ```
 
 3. Enable and start services.
 
 ```bash
-sudo sawadm keygen
-sudo systemctl enable sawtooth-validator sawtooth-settings-tp sawtooth-rest-api
-sudo systemctl start sawtooth-validator sawtooth-settings-tp sawtooth-rest-api
+sudo systemctl restart sawtooth-validator
 ```
 
 ### References
 
-* sawtooth.hyperledger.org > Docs > Release 1.0.5  > System Administator's Guide > Running Sawtooth as a Service: [Running Sawtooth](https://sawtooth.hyperledger.org/docs/core/releases/1.0.5/sysadmin_guide/systemd.html#running-sawtooth)
-* sawtooth.hyperledger.org > Docs > Release 1.0.5 > CLI Command Reference > sawtooth > [sawtooth peer list](https://sawtooth.hyperledger.org/docs/core/releases/1.0/cli/sawtooth.html#sawtooth-peer-list)
-* sawtooth.hyperledger.org > FAQ > Validator > [What TCP ports does Sawtooth use?](https://sawtooth.hyperledger.org/faq/validator/#what-tcp-ports-does-sawtooth-use)
+* sawtooth.hyperledger.org > Docs > Release 1.0.5  > System Administator's Guide > Configuring Sawtooth > [Validator Configuration File](https://sawtooth.hyperledger.org/docs/core/releases/1.0.5/sysadmin_guide/configuring_sawtooth/validator_configuration_file.html)
 
 </p>
 </details>
