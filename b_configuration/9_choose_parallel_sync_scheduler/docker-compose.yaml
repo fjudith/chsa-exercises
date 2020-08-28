@@ -1,0 +1,129 @@
+version: "2.1"
+
+services:
+  chsa-b9-00:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-b9-00
+    image: chsa-exercises/ubuntu:16.04-b900
+    container_name: chsa-b9-00
+    hostname: chsa-b9-00
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv
+      - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+
+  chsa-b9-01:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-b9-01
+    image: chsa-exercises/ubuntu:16.04-b901
+    container_name: chsa-b9-01
+    hostname: chsa-b9-01
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      # - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv
+      # - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+
+  chsa-b9-02:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-b9-02
+    image: chsa-exercises/ubuntu:16.04-b902
+    container_name: chsa-b9-02
+    hostname: chsa-b9-02
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      # - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv
+      # - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+
+  chsa-b9-influxdb:
+    image: amd64/influxdb:alpine
+    container_name: chsa-b9-influxdb
+    hostname: chsa-b9-influxdb
+    expose:
+      - 8086
+    environment:
+      INFLUXDB_DB: "metrics"
+      INFLUXDB_HTTP_AUTH_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: "admin"
+      INFLUXDB_ADMIN_PASSWORD: "{admin-pw}"
+      INFLUXDB_USER: "lrdata"
+      INFLUXDB_USER_PASSWORD: "{lrdata-pw}"
+    command:
+      - "-config"
+      - "/etc/influxdb/influxdb.conf"
+    volumes:
+      - ./assets/chsa-b9-influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+
+  chsa-b9-grafana:
+    image: grafana/grafana:7.1.5
+    container_name: chsa-b9-grafana
+    hostname: chsa-b9-grafana
+    ports:
+      - 53000:3000
+    volumes:
+      - ./assets/chsa-b9-grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+      - ./assets/chsa-b9-grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml:ro
+      - ./assets/chsa-b9-grafana/sawtooth_performance.json:/grafana-dashboard-definitions/0/sawtooth/sawtooth_performance.json:ro
+
+  chsa-b9-loadgen:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-b9-loadgen
+    image: chsa-exercises/ubuntu:16.04-b9loadgen
+    container_name: chsa-b9-loadgen
+    hostname: chsa-b9-loadgen
+    volumes:
+      - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv
+      - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub
