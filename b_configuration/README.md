@@ -8,4 +8,4 @@
 8. Configure systemd services
 9. [Choose parallel / sync scheduler](./9_choose_parallel_sync_scheduler/README.md)
 10. [Configure storage paths](./10_configure_storage_path/README.md)
-11. [Configure Sawtooth CLI]
+11. [Configure Sawtooth CLI](./11_configure_sawtooth_cli/README.md)
