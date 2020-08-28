@@ -32,7 +32,7 @@ sudo sawtooth:sawtooth /etc/sawtooth/rest_api.toml
 
 ```toml
 ...
-bind = ["127.0.0.1:8008", "eth0:8008"]
+bind = ["chsa-b4-02:8008"]
 ...
 ```
 
