@@ -24,7 +24,10 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
       - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+      - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv
+      - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub
 
   chsa-c2-01:
     privileged: true
@@ -49,7 +52,10 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
       - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+      - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv
+      - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub
 
   chsa-c2-02:
     privileged: true
@@ -74,7 +80,40 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
       - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+      - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv
+      - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub
+
+  chsa-c2-influxdb:
+    image: amd64/influxdb:alpine
+    container_name: chsa-c2-influxdb
+    hostname: chsa-c2-influxdb
+    expose:
+      - 8086
+    environment:
+      INFLUXDB_DB: "metrics"
+      INFLUXDB_HTTP_AUTH_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: "admin"
+      INFLUXDB_ADMIN_PASSWORD: "{admin-pw}"
+      INFLUXDB_USER: "lrdata"
+      INFLUXDB_USER_PASSWORD: "{lrdata-pw}"
+    command:
+      - "-config"
+      - "/etc/influxdb/influxdb.conf"
+    volumes:
+      - ./assets/chsa-c2-influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+
+  chsa-c2-grafana:
+    image: grafana/grafana:7.1.5
+    container_name: chsa-c2-grafana
+    hostname: chsa-c2-grafana
+    ports:
+      - 53000:3000
+    volumes:
+      - ./assets/chsa-c2-grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+      - ./assets/chsa-c2-grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml:ro
+      - ./assets/chsa-c2-grafana/sawtooth_performance.json:/grafana-dashboard-definitions/0/sawtooth/sawtooth_performance.json:ro
 
   chsa-c2-loadgen:
     privileged: true

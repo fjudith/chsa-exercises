@@ -36,10 +36,10 @@ bind = [
 # and 'dynamic' which will do topology buildouts. If 'dynamic' is provided,
 # any static peers will be processed first, prior to the topology buildout
 # starting.
-peering = "dynamic"
+peering = "static"
 
 # Advertised network endpoint URL.
-endpoint = "tcp://chsa-c1-00:8800"
+endpoint = "tcp://chsa-c2-00:8800"
 
 # Uri(s) to connect to in order to initially connect to the validator network,
 # in the format tcp://hostname:port. This is not needed in static peering mode
@@ -48,7 +48,7 @@ seeds = ["tcp://127.0.0.1:8801"]
 
 # A list of peers to attempt to connect to in the format tcp://hostname:port.
 # It defaults to None.
-peers = ["tcp://127.0.0.1:8801"]
+peers = ["tcp://chsa-c2-01:8800","tcp://chsa-c2-02:8800"]
 
 # The type of scheduler to use. The choices are 'serial' or 'parallel'.
 scheduler = 'serial'
@@ -67,14 +67,13 @@ minimum_peer_connectivity = 3
 maximum_peer_connectivity = 10
 
 # The host and port for Open TSDB database used for metrics
-# opentsdb_url = ""
+opentsdb_url = "http://chsa-c2-influxdb:8086"
 
 # The name of the database used for storing metrics
-# opentsdb_db = ""
+opentsdb_db = "metrics"
 
-# opentsdb_username = ""
-
-# opentsdb_password = ""
+opentsdb_username = "lrdata"
+opentsdb_password = "{lrdata-pw}"
 
 # The type of authorization that must be performed for the different type of
 # roles on the network. The different supported authorization types are "trust"
@@ -88,6 +87,6 @@ maximum_peer_connectivity = 10
 # key, the key must be wrapped in quotes so toml can process it. The value
 # should be the file name of a policy stored in the policy_dir.
 
-# [permissions]
-# transactor = "policy.example"
+[permissions]
+transactor = "policy.example"
 # "transactor.transaction_signer" = "policy.example"

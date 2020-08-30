@@ -19,7 +19,7 @@
 #
 
 # The port and host for the api to run on
-bind = ["chsa-c1-01:8008"]
+bind = ["*:8008"]
 
 # The url to connect to a running Validator
 #   connect = "tcp://localhost:4004"
@@ -28,10 +28,10 @@ bind = ["chsa-c1-01:8008"]
 #   timeout = 300
 
 # The host and port for Open TSDB database used for metrics
-# opentsdb_url = ""
+opentsdb_url = "http://chsa-c2-influxdb:8086"
 
 # The name of the database used for storing metrics
-# opentsdb_db = ""
+opentsdb_db = "metrics"
 
-# opentsdb_username = ""
-# opentsdb_password = ""
+opentsdb_username = "lrdata"
+opentsdb_password = "{lrdata-pw}"

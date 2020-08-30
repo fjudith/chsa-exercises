@@ -1,0 +1,19 @@
+apiVersion: 1
+
+# list of datasources that should be deleted from the database
+deleteDatasources:
+  - name: InfluxDB
+    orgId: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    database: metrics
+    user: lrdata
+    password: "{lrdata-pw}"
+    url: http://chsa-c4-influxdb:8086
+    jsonData:
+      httpMode: GET
+    version: 1
+    editable: true

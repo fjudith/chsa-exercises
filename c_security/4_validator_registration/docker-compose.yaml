@@ -1,0 +1,130 @@
+version: "2.1"
+
+services:
+  chsa-c4-00:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-c4-00
+    image: chsa-exercises/ubuntu:16.04-c200
+    container_name: chsa-c4-00
+    hostname: chsa-c4-00
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+      - ./assets/chsa-c4-00/validator.priv:/etc/sawtooth/keys/validator.priv:ro
+      - ./assets/chsa-c4-00/validator.pub:/etc/sawtooth/keys/validator.pub:ro
+
+  chsa-c4-01:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-c4-01
+    image: chsa-exercises/ubuntu:16.04-c201
+    container_name: chsa-c4-01
+    hostname: chsa-c4-01
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+      - ./assets/chsa-c4-01/validator.priv:/etc/sawtooth/keys/validator.priv:ro
+      - ./assets/chsa-c4-01/validator.pub:/etc/sawtooth/keys/validator.pub:ro
+
+  chsa-c4-02:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-c4-02
+    image: chsa-exercises/ubuntu:16.04-c202
+    container_name: chsa-c4-02
+    hostname: chsa-c4-02
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+      - ./assets/chsa-c4-02/validator.priv:/etc/sawtooth/keys/validator.priv:ro
+      - ./assets/chsa-c4-02/validator.pub:/etc/sawtooth/keys/validator.pub:ro
+
+  chsa-c4-influxdb:
+    image: amd64/influxdb:alpine
+    container_name: chsa-c4-influxdb
+    hostname: chsa-c4-influxdb
+    expose:
+      - 8086
+    environment:
+      INFLUXDB_DB: "metrics"
+      INFLUXDB_HTTP_AUTH_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: "admin"
+      INFLUXDB_ADMIN_PASSWORD: "{admin-pw}"
+      INFLUXDB_USER: "lrdata"
+      INFLUXDB_USER_PASSWORD: "{lrdata-pw}"
+    command:
+      - "-config"
+      - "/etc/influxdb/influxdb.conf"
+    volumes:
+      - ./assets/chsa-c4-influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+
+  chsa-c4-grafana:
+    image: grafana/grafana:7.1.5
+    container_name: chsa-c4-grafana
+    hostname: chsa-c4-grafana
+    ports:
+      - 53000:3000
+    volumes:
+      - ./assets/chsa-c4-grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+      - ./assets/chsa-c4-grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml:ro
+      - ./assets/chsa-c4-grafana/sawtooth_performance.json:/grafana-dashboard-definitions/0/sawtooth/sawtooth_performance.json:ro
+
+  chsa-c4-loadgen:
+    privileged: true
+    build: 
+      context: ./
+      dockerfile: Dockerfile.loadgen
+      args:
+        ASSET_PATH: assets/chsa-c4-loadgen
+    image: chsa-exercises/ubuntu:16.04-c2loadgen
+    container_name: chsa-c4-loadgen
+    hostname: chsa-c4-loadgen
+    volumes:
+      - ./assets/loadgen.priv:/home/loadgen/.sawtooth/keys/loadgen.priv
+      - ./assets/loadgen.pub:/home/loadgen/.sawtooth/keys/loadgen.pub

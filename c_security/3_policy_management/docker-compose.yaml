@@ -1,0 +1,91 @@
+version: "2.1"
+
+services:
+  chsa-c3-00:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-c3-00
+    image: chsa-exercises/ubuntu:16.04-c300
+    container_name: chsa-c3-00
+    hostname: chsa-c3-00
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+
+  chsa-c3-01:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-c3-01
+    image: chsa-exercises/ubuntu:16.04-c301
+    container_name: chsa-c3-01
+    hostname: chsa-c3-01
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+
+  chsa-c3-02:
+    privileged: true
+    build: 
+      context: ./
+      args:
+        ASSET_PATH: assets/chsa-c3-02
+    image: chsa-exercises/ubuntu:16.04-c302
+    container_name: chsa-c3-02
+    hostname: chsa-c3-02
+    expose:
+      - 8800
+      - 4004
+      - 8008
+    security_opt:
+      - seccomp:unconfined
+    tty: true
+    user: root
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
+
+  chsa-c3-loadgen:
+    privileged: true
+    build: 
+      context: ./
+      dockerfile: Dockerfile.loadgen
+      args:
+        ASSET_PATH: assets/chsa-c3-loadgen
+    image: chsa-exercises/ubuntu:16.04-c3loadgen
+    container_name: chsa-c3-loadgen
+    hostname: chsa-c3-loadgen
+    volumes:
+      - ./assets/loadgen.priv:/home/loadgen/.sawtooth/keys/loadgen.priv
+      - ./assets/loadgen.pub:/home/loadgen/.sawtooth/keys/loadgen.pub
