@@ -18,7 +18,7 @@ fi
 
 sudo systemctl enable sawtooth-validator
 sudo systemctl enable sawtooth-settings-tp
-# sudo systemctl enable sawtooth-identity-tp
+sudo systemctl enable sawtooth-identity-tp
 sudo systemctl enable sawtooth-poet-validator-registry-tp
 sudo systemctl enable sawtooth-rest-api
 

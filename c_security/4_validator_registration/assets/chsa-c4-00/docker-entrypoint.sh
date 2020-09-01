@@ -38,7 +38,7 @@ sudo sawadm genesis config-genesis.batch config.batch poet-settings.batch /tmp/p
 
 sudo systemctl enable sawtooth-validator
 sudo systemctl enable sawtooth-settings-tp
-# sudo systemctl enable sawtooth-identity-tp
+sudo systemctl enable sawtooth-identity-tp
 sudo systemctl enable sawtooth-poet-validator-registry-tp
 sudo systemctl enable sawtooth-rest-api
 
