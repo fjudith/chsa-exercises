@@ -7,7 +7,7 @@ services:
       context: ./
       args:
         ASSET_PATH: assets/chsa-c4-00
-    image: chsa-exercises/ubuntu:16.04-c200
+    image: chsa-exercises/ubuntu:16.04-c400
     container_name: chsa-c4-00
     hostname: chsa-c4-00
     expose:
@@ -25,17 +25,18 @@ services:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
-      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
-      - ./assets/chsa-c4-00/validator.priv:/etc/sawtooth/keys/validator.priv:ro
-      - ./assets/chsa-c4-00/validator.pub:/etc/sawtooth/keys/validator.pub:ro
+      - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv:ro
+      - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub:ro
 
   chsa-c4-01:
+    depends_on:
+      - chsa-c4-00
     privileged: true
     build: 
       context: ./
       args:
         ASSET_PATH: assets/chsa-c4-01
-    image: chsa-exercises/ubuntu:16.04-c201
+    image: chsa-exercises/ubuntu:16.04-c401
     container_name: chsa-c4-01
     hostname: chsa-c4-01
     expose:
@@ -53,17 +54,18 @@ services:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
-      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
-      - ./assets/chsa-c4-01/validator.priv:/etc/sawtooth/keys/validator.priv:ro
-      - ./assets/chsa-c4-01/validator.pub:/etc/sawtooth/keys/validator.pub:ro
+      - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv:ro
+      - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub:ro
 
   chsa-c4-02:
+    depends_on:
+      - chsa-c4-00
     privileged: true
     build: 
       context: ./
       args:
         ASSET_PATH: assets/chsa-c4-02
-    image: chsa-exercises/ubuntu:16.04-c202
+    image: chsa-exercises/ubuntu:16.04-c402
     container_name: chsa-c4-02
     hostname: chsa-c4-02
     expose:
@@ -81,9 +83,8 @@ services:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
-      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
-      - ./assets/chsa-c4-02/validator.priv:/etc/sawtooth/keys/validator.priv:ro
-      - ./assets/chsa-c4-02/validator.pub:/etc/sawtooth/keys/validator.pub:ro
+      - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv:ro
+      - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub:ro
 
   chsa-c4-influxdb:
     image: amd64/influxdb:alpine

@@ -56,6 +56,17 @@ RUN sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8AA7A
     apt-get clean && \
     rm -rf /usr/share/doc/* /usr/share/man/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install network key generator
+RUN sudo apt-get update -y && \
+    sudo apt-get install g++ libzmq3-dev -y && \
+    sudo curl -O https://raw.githubusercontent.com/zeromq/libzmq/master/tools/curve_keygen.cpp && \
+    sudo g++ curve_keygen.cpp -o /usr/local/bin/curve_keygen -lzmq && \
+    sudo apt-get remove g++ libzmq3-dev -y && \
+    sudo rm -f curve_keygen.cpp && \
+    apt-get autoremove -y --purge && \
+    apt-get clean && \
+    rm -rf /usr/share/doc/* /usr/share/man/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # Install Telegraph
 RUN curl -sL https://repos.influxdata.com/influxdb.key |  sudo apt-key add - && \
     sudo apt-add-repository "deb https://repos.influxdata.com/ubuntu xenial stable" && \
