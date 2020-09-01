@@ -83,7 +83,6 @@ services:
       # - ./assets/sysops.priv:/home/sysops/.sawtooth/keys/sysops.priv
       # - ./assets/sysops.pub:/home/sysops/.sawtooth/keys/sysops.pub
       - ./assets/telegraf.conf:/etc/telegraf/telegraf.conf
-      - ./assets/config-genesis.batch:/home/sysops/.sawtooth/config-genesis.batch
 
   chsa-b9-influxdb:
     image: amd64/influxdb:alpine
