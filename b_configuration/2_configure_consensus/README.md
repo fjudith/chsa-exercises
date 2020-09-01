@@ -34,11 +34,19 @@ sudo systemctl start sawtooth-poet-validator-registry-tp
 
 
  ```bash
-sawset proposal create \
-"sawtooth.consensus.algorithm=poet" \
-"sawtooth.poet.report_public_key_pem=$(cat /etc/sawtooth/simulator_rk_pub.pem)" \
-"sawtooth.poet.valid_enclave_measurement=$(poet enclave measurement)" \
-"sawtooth.poet.valid_enclave_basenames=$(poet enclave basename)"
+ cd /tmp
+sudo -u sawtooth poet registration create -k /etc/sawtooth/keys/validator.priv
+
+sudo sawset proposal create -k /etc/sawtooth/keys/validator.priv \
+sawtooth.consensus.algorithm=poet \
+sawtooth.poet.report_public_key_pem="$(cat /etc/sawtooth/simulator_rk_pub.pem)" \
+sawtooth.poet.valid_enclave_measurements="$(poet enclave measurement)" \
+sawtooth.poet.valid_enclave_basenames="$(poet enclave basename)"
+
+sudo sawset proposal create -k /etc/sawtooth/keys/validator.priv \
+sawtooth.publisher.max_batches_per_block=1 \
+sawtooth.poet.target_wait_time=10 \
+sawtooth.poet.initial_wait_time=20
  ```
 
 4. Validate that new settings are implemented
