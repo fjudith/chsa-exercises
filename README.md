@@ -1,4 +1,4 @@
-[![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
+Shield: [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
 # Certified Hyperledger Sawtooth Administrator (CHSA) exercises
 
@@ -10,8 +10,8 @@ Labs are designed to practice different topology and configuration by leveraging
 ## Roadmap
 
 * [x] [Install](./a_install) 10%
-* [ ] [Configuration](./b_configuration) 25%
-* [ ] [Permissioning, Identity Managmeent, and Security](./c_security) 20%
+* [x] [Configuration](./b_configuration) 25%
+* [x] [Permissioning, Identity Managmeent, and Security](./c_security) 20%
 * [ ] [Lifecycle](./d_lifecycle) 25%
 * [ ] [Troubleshooting](./e_troubleshooting) 20%
 
@@ -37,7 +37,7 @@ cd a_install/5_configure_peering/
 
 ### Known issues
 
-* Works on Windows Subsystem for Linux (WSL) 2 [(n. Watch the doc)](./docs/wsl_genie.md).
+* Works on Windows Subsystem for Linux (WSL) 2 [(ref. doc)](./docs/wsl_genie.md).
 
 
 ## License
