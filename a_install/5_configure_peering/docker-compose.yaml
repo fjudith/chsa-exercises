@@ -13,7 +13,7 @@ services:
     expose:
       - 8800
       - 4004
-      - 8000
+      - 8008
     security_opt:
       - seccomp:unconfined
     tty: true
@@ -37,7 +37,7 @@ services:
     expose:
       - 8800
       - 4004
-      - 8000
+      - 8008
     security_opt:
       - seccomp:unconfined
     tty: true
@@ -61,7 +61,7 @@ services:
     expose:
       - 8800
       - 4004
-      - 8000
+      - 8008
     security_opt:
       - seccomp:unconfined
     tty: true
