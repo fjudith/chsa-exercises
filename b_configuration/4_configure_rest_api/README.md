@@ -1,4 +1,4 @@
-# Configure Peering
+# Configure REST API
 
 Build and run the `Ubuntu 16.04 (Xenial)` containers.
 
